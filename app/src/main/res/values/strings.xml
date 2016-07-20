@@ -1,0 +1,78 @@
+<resources>
+
+    <!--Screen Names-->
+    <string name="app_name">Freelancer</string>
+    <string name="setup_name">Setup Freelancer</string>
+    <string name="title_activity_create_client_dialog">New Client</string>
+    <string name="title_activity_update_log">Update Daily Log</string>
+    <string name="title_activity_client_list">Client List</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Passcode (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This passcode is too short</string>
+    <string name="error_incorrect_password">This passcode is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."</string>
+
+    <string name="create_new_client_button">Create New Client</string>
+    <string name="title_activity_setup">"Setup "</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_exit">Exit Confirmation</string>
+    <string name="dialog_exit_question">Are you sure you want to Exit?</string>
+    <string name="dialog_clear_setup">This will clear all saved data</string>
+    <string name="dialog_clear_setup_title">Clear Settings</string>
+    <string name="notification_title">Update Daily Log</string>
+    <string name="notification_content">Update your Log</string>
+
+    <!--Days of week-->
+    <string name="daysList">
+        Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday</string>
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="setup_notify_freq_title">Set Notification Frequency</string>
+    <string name="create_client_recurrence_title">Choose days for recurrence</string>
+    <string name="create_client_list_recurrence">Recurrence</string>
+    <string name="update_log_title">Select Clients</string>
+    <string name="update_log_confirmation_title">Update Confirmation</string>
+    <!-- Used for the AlphabetIndexer in ContactsListFragment to provide quick navigation by
+         alphabet using ListView fast scroll. -->
+    <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <!-- When using ContactsContract.Contacts#CONTENT_FILTER_URI to search contacts, a match occurs
+        when using a number of different fields, such as name, e-mail address, address, phone
+        number, etc. When a match occurs that is not the name, there is currently no way to tell
+        which other field was matched. This string is displayed in the secondary display text in
+        ContactsListFragment when a search query match occurs that is not the display name.
+        -->
+    <string name="search_match_other">Matches Other Field</string>
+    <string name="no_contacts">No Contacts Found</string>
+    <string name="menu_search">Search</string>
+    <string name="contacts_list_search_results_title">Contacts List Search for \\\"%s\\\"</string>
+    <string name="title_activity_yearly_total">Year to Date</string>
+    <string name="dialog_message_phone">Call or Text, </string>
+
+</resources>

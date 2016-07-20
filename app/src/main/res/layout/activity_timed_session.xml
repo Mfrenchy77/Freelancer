@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.frenchfriedtechnology.freelancer.View.Activity.TimedSession">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include
+            layout="@layout/toolbar_freelancer"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        layout="@layout/content_timed_session"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/button_start_session"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:hapticFeedbackEnabled="true"
+            android:onClick="startSession"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/session_start_image"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="10dp"
+                android:src="@drawable/vector_play"
+                android:tint="@color/accent"
+                android:transitionName="new_client"/>
+
+            <TextView
+                android:id="@+id/session_start_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Start"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_save_session"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:hapticFeedbackEnabled="true"
+            android:onClick="saveSession"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/session_save_image"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="15dp"
+                android:src="@drawable/vector_save"
+                android:tint="@color/accent"
+                android:transitionName="saveSession"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Save"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

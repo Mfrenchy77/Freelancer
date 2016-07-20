@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/content_main_layout_container"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:layout_marginTop="44dp"
+              android:baselineAligned="false"
+              android:gravity="center"
+              android:orientation="horizontal"
+              tools:context=".View.Activity.MainActivity"
+              tools:showIn="@layout/activity_main">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/button_create_client"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:hapticFeedbackEnabled="true"
+            android:onClick="createNewClient"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Client"/>
+
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_new_client"
+                android:tint="@color/accent"
+                android:transitionName="new_client"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:hapticFeedbackEnabled="true"
+            android:onClick="yearlyTally"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_yearly_tally"
+                android:tint="@color/accent"
+                android:transitionName="yearly_total"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Yearly Total"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="viewClientList"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Client List"/>
+
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_client_list"
+                android:tint="@color/accent"
+                android:transitionName="client_list"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="updateDailyLog"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/content_main_update_log_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/accent"
+                android:elevation="8dp"
+                android:paddingLeft="10dp"
+                android:src="@drawable/vector_freelancer"
+                android:tint="@color/primary_light"
+                android:transitionName="update log"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Update Daily Log"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="monthlyTally"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_monthly_tally"
+                android:tint="@color/accent"
+                android:transitionName="monthly_total"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Monthly Total"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="timedSession"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timed Session"/>
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_ic_timer"
+                android:tint="@color/accent"
+                android:transitionName="edit_client"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="openSettings"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/circle_icon_bg"
+                android:backgroundTint="@color/primary_light"
+                android:elevation="8dp"
+                android:padding="20dp"
+                android:src="@drawable/vector_settings"
+                android:tint="@color/accent"
+                android:transitionName="settings"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Settings"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

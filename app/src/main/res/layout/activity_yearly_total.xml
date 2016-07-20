@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.frenchfriedtechnology.freelancer.View.Activity.ClientList">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include layout="@layout/toolbar_freelancer"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <com.frenchfriedtechnology.freelancer.View.Widgets.FreelancerRealmRecyclerView
+        android:id="@+id/activity_yearly_recycler_view"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="150dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <FrameLayout
+        android:id="@+id/detail_fab_anchor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="90dp"
+            android:layout_marginRight="90dp"
+            android:clickable="true"
+            android:tint="@color/cardview_light_background"
+            android:src="@drawable/vector_down"
+            app:fabSize="normal"
+            app:layout_anchor="@+id/detail_fab_anchor"
+            app:pressedTranslationZ="12dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginBottom="16dp"
+            android:tint="@color/cardview_light_background"
+            android:layout_marginLeft="90dp"
+            android:layout_marginStart="90dp"
+            android:clickable="true"
+            android:src="@drawable/vector_up"
+            app:fabSize="normal"
+            app:layout_anchor="@+id/detail_fab_anchor"
+            app:pressedTranslationZ="12dp"/>
+
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
