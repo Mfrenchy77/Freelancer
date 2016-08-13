@@ -52,6 +52,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_yearly_tally"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -89,6 +90,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/button_view_client_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -119,9 +121,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_update_log"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
+            android:transitionName="update_log"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:gravity="center"
@@ -149,6 +153,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_monthly_tally"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -187,6 +192,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/button_timed_session"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -215,6 +221,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_settings"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"

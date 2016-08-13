@@ -6,9 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.TextUtils;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -77,12 +81,22 @@ public class UpdateLog extends BaseActivity {
 /*
         freeLancerDatabaseAdapter = new FreeLancerDatabaseAdapter(this);
 */
+        setupWindowAnimations();
         textClients = (TextView) findViewById(R.id.log_select_clients);
         textDate.setText(sdf.format(currentDate.getTime()));
 
 
     }
+    private void setupWindowAnimations() {
+        Fade fade = new Fade();
+        fade.setDuration(800);
 
+        Slide slide = new Slide(Gravity.LEFT);
+        slide.setInterpolator(new FastOutSlowInInterpolator());
+        slide.setDuration(1000);
+
+        getWindow().setEnterTransition(fade);
+    }
     /**
      * Image Button to update Daily Log
      */
@@ -116,7 +130,7 @@ public class UpdateLog extends BaseActivity {
                 textDate.setText(sdf.format(newDate.getTime()));
             }
         };
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,onDateSetListener,currentDate.get(Calendar.YEAR),
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, onDateSetListener, currentDate.get(Calendar.YEAR),
                 currentDate.get(Calendar.MONTH),
                 currentDate.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

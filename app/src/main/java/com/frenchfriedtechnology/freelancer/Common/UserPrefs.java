@@ -18,12 +18,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class UserPrefs {
 
+    private static final String ACTIVITY_TAG = "USER_PREFS";
     private static final String SHARED_PREFS_NOTIFY_TIME = "NOTIFY_TIME";
     private static final String SHARED_PREFS_NOTIFY_FREQ = "NOTIFY_FREQ";
     private static final String SHARED_PREFS_NAME = "FREELANCER";
     private static final String SHARED_PREFS_SETUP = "SETUP";
     private static final String SHARED_PREFS_LOGO = "LOGO";
     private static final String USER_NAME = "USER_NAME";
+    private static final String SHARED_PREFS_TIMED_SESSION_RUNNING = "TIMED_SESSION_RUNNING";
+    private static final String SHARED_PREFS_TIMED_SESSION_PAUSE_TIME = "PAUSE_TIME";
+    private static final String SHARED_PREFS_TIMED_SESSION_CURRENT_RECORDED_TIME = "CURRENT_RECORDED_TIME";
+    private static final String SHARED_PREFS_TIMED_SESSION_CLIENT = "TIMED_SESSION_CLIENT";
+    private static final String SHARED_PREFS_TIMED_SESSION_CLIENT_RATE = "TIMED_SESSION_CLIENT_RATE";
 
     public UserPrefs() {
     }
@@ -43,6 +49,54 @@ public class UserPrefs {
     public void clearUser() {
         editSharedPrefs().clear();
     }
+
+    /**
+     * Getters and Setters for Timed Session to calculate elapsed time if Freelancer pauses or closes
+     */
+
+    public void setTimedSessionRunning(boolean running) {
+        Log.d(Logger.TAG, ACTIVITY_TAG + " setTimedSessionRunning() " + running);
+        editSharedPrefs().putBoolean(SHARED_PREFS_TIMED_SESSION_RUNNING, running).apply();
+    }
+
+    public boolean isTimedSessionRunning() {
+        return getSharedPrefs().getBoolean(SHARED_PREFS_TIMED_SESSION_RUNNING, false);
+    }
+
+    public void setTimedSessionPauseTime(long pauseTime) {
+        Log.d(Logger.TAG, ACTIVITY_TAG + " setTimedSessionPauseTime() pauseTime: " + pauseTime);
+        editSharedPrefs().putLong(SHARED_PREFS_TIMED_SESSION_PAUSE_TIME, pauseTime).apply();
+    }
+
+    public long getTimedSessionPauseTime() {
+        return getSharedPrefs().getLong(SHARED_PREFS_TIMED_SESSION_PAUSE_TIME, 0);
+    }
+
+    public void setTimedSessionCurrentRecordedTime(long recordedTime) {
+        Log.d(Logger.TAG, ACTIVITY_TAG + " setTimedSessionCurrentElapsedTime() recordedTime: " + recordedTime);
+        editSharedPrefs().putLong(SHARED_PREFS_TIMED_SESSION_CURRENT_RECORDED_TIME, recordedTime).apply();
+    }
+
+    public long getTimedSessionCurrentRecordedTime() {
+        return getSharedPrefs().getLong(SHARED_PREFS_TIMED_SESSION_CURRENT_RECORDED_TIME, 0);
+    }
+
+    public void setTimedSessionClient(String client){
+        Log.d(Logger.TAG,ACTIVITY_TAG+ "setTimedSessionClient() client: "+client);
+        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT,client).apply();
+    }
+    public String getTimedSessionClient(){
+        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT,"");
+    }
+
+    public void setTimedSessionClientRate(String rate){
+        Log.d(Logger.TAG,ACTIVITY_TAG+ " setTimedSessionClientRate() rate: "+ rate);
+        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE,rate).apply();
+    }
+    public String getTimedSessionClientRate(){
+        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE,"");
+    }
+
 
     /**
      * Saves the days to be notified

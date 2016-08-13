@@ -2,7 +2,10 @@ package com.frenchfriedtechnology.freelancer.View.Dialog;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
@@ -25,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frenchfriedtechnology.freelancer.Common.BusProvider;
+import com.frenchfriedtechnology.freelancer.Common.CircularAnimUtil;
 import com.frenchfriedtechnology.freelancer.Common.Logger;
 import com.frenchfriedtechnology.freelancer.Database.FreeLancerDatabaseAdapter;
 import com.frenchfriedtechnology.freelancer.Events.DayChosenEvent;
@@ -65,7 +69,7 @@ public class CreateClientDialog extends DialogFragment {
 
     private TextInputEditText clientName, clientNameTwo, clientRecurrence,
             clientEmail, clientPhone, clientAddress, clientRate, clientNotes;
-    private LinearLayout createButton, cancelButton;
+    private LinearLayout createButton, cancelButton, root;
     private Button chooseFromContactsButton;
     /*
         private TextView clientRecurrence;
@@ -78,13 +82,16 @@ public class CreateClientDialog extends DialogFragment {
         Bundle bundle = new Bundle();
         bundle.putString(CLIENT, clientName);
         bundle.putString(TAG, tag);
+
         CreateClientDialog dialog = new CreateClientDialog();
         dialog.setArguments(bundle);
+
         return dialog;
     }
 
     private String editClientName;
     private String tag;
+    private AlertDialog dialog;
     private Realm realm;
     private RealmConfiguration realmConfig;
 
@@ -103,12 +110,13 @@ public class CreateClientDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(tag.equals(NEW_CLIENT) ? "New Client" : "Edit Client");
-        FrameLayout fl = new FrameLayout(getActivity());
+        final FrameLayout fl = new FrameLayout(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.dialog_create_client, fl, false);
+        final View view = inflater.inflate(R.layout.dialog_create_client, fl, false);
         fl.addView(view);
 
+        root = (LinearLayout) view.findViewById(R.id.create_client_root);
         chooseFromContactsButton = (Button) view.findViewById(R.id.choose_from_contacts_button);
         clientRecurrence = (TextInputEditText) view.findViewById(R.id.create_client_recurrence_button);
         clientAddress = (TextInputEditText) view.findViewById(R.id.client_location);
@@ -147,7 +155,7 @@ public class CreateClientDialog extends DialogFragment {
                 deleteClient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(),clientName.getText()+" deleted",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), clientName.getText() + " deleted", Toast.LENGTH_SHORT).show();
                         realm.beginTransaction();
                         client.removeFromRealm();
                         realm.commitTransaction();
@@ -213,9 +221,20 @@ public class CreateClientDialog extends DialogFragment {
 
         //set the contact autocomplete        clientName.setAdapter(new );
         builder.setView(fl);
+        dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                CircularAnimUtil.dialogReveal(view, true, null);
+            }
+        });
+
         BusProvider.Instance.getBus().register(this);
         ButterKnife.bind(getActivity());
-        return builder.create();
+
+        dialog.show();
+
+        return dialog;
 
     }
 
@@ -264,7 +283,7 @@ public class CreateClientDialog extends DialogFragment {
         if (DialogFrequencyPicker.CHOSE_CLIENT_RECURRENCE.equals(event.getTag())) {
             Log.d(Logger.TAG, "BUS FOR - " + event.getTag() + "\n" + event.getText());
             clientRecurrence.setText(event.getText());
-                     clientNotes.requestFocus();
+            clientNotes.requestFocus();
         }
     }
 
