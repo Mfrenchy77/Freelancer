@@ -1,6 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-import android.support.annotation.Nullable;
 
 /**
  * Created by matteo on 2/4/16.

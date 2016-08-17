@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by matteo on 3/10/16.
+ * Realm Database object for Log Entries
  */
 public class LogEntry extends RealmObject {
 

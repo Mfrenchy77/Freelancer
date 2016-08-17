@@ -9,9 +9,6 @@ import com.frenchfriedtechnology.freelancer.Freelancer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by matteo on 1/25/16.

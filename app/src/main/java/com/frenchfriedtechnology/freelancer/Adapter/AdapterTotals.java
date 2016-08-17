@@ -38,7 +38,7 @@ import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 
 /**
- * Created by matteo on 3/29/16.
+ * RecyclerView Adapter for listing all the Log Updates and a Chart to show Money earner per day
  */
 public class AdapterTotals extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -145,8 +145,8 @@ public class AdapterTotals extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             Calendar c = Calendar.getInstance();
             String format = "MM/dd/yy";
-            String date = "01/01/"+ c.get(Calendar.YEAR);
-            Log.d(Logger.TAG, "Beginning of Year: "+date);
+            String date = "01/01/" + c.get(Calendar.YEAR);
+            Log.d(Logger.TAG, "Beginning of Year: " + date);
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
 /*
 c.set(Calendar.YEAR,Calendar.JANUARY,01);
@@ -183,7 +183,7 @@ c.set(Calendar.YEAR,Calendar.JANUARY,01);
                   /* Log.d(Logger.TAG, "Empty Index = " + index);*/
                 }
                 //add empty day and move index up and date up
-                labels.add(index,formattedDate);
+                labels.add(index, formattedDate);
                 index++;
                 c.add(Calendar.DATE, 1);
             }
@@ -230,7 +230,8 @@ c.set(Calendar.YEAR,Calendar.JANUARY,01);
 
     public class HeaderViewHolder extends RealmViewHolder {
         private BarChart barChart;
-private LineChart lineChart;
+        private LineChart lineChart;
+
         public HeaderViewHolder(View itemView) {
             super(itemView);
             this.barChart = (BarChart) itemView.findViewById(R.id.header_bar_chart);

@@ -190,7 +190,6 @@ public class YearlyTotalActivity extends BaseActivity {
     private void setUpRecycler() {
         llManager = new LinearLayoutManagerWithSmoothScroller(this);
         recyclerView.setLayoutManager(llManager);
-//        TotalsRealmAdapter totalsRealmAdapter = new TotalsRealmAdapter(this, results, true, true);
         mAdapterTotals = new AdapterTotals(this, realm, results);
         results.addChangeListener(new RealmChangeListener() {
             @Override

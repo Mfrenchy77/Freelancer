@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.ContactsContract;
-import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -34,8 +33,6 @@ import com.frenchfriedtechnology.freelancer.View.Dialog.CreateClientDialog;
 import com.frenchfriedtechnology.freelancer.View.Widgets.FreelancerRealmRecyclerView;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -43,38 +40,41 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
+
+/**
+ * Activity displaying a list of clients saved in Freelancer. Tap to edit contact, text or call,
+ * open maps if address is provided
+ */
+
 public class ClientList extends BaseActivity {
-    private static final String STATE_CLIENT_LIST = "STATE_CLIENT_LIST";
-    private static final String IS_NEW_CLIENT = "IS_NEW_CLIENT";
-
-    static final int PICK_CONTACT_REQUEST = 69;
-    private String contactID;
-
-    @Bind(R.id.client_recyclerView)
-    FreelancerRealmRecyclerView clientRecyclerView;
-    @Bind(R.id.activity_client_list_fab)
-    FloatingActionButton newClientFab;
-
-    /*
-        private RealmRecyclerView realmRecyclerView;
-
-        private ClientListRealmAdapter mRealmAdapter;
-        */
-    private ArrayList<Client> listClient = new ArrayList<>();
-
-    //    private ArrayList<CLObject> listClient = new ArrayList<>();
-    private ClientListAdapter clientListAdapter;
-    private Realm realm;
-    private RealmConfiguration realmConfig;
-    RealmResults<Client> results;
-    private StaggeredGridLayoutManager layoutManager;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_client_list;
     }
 
+    @Bind(R.id.client_recyclerView)
+    FreelancerRealmRecyclerView clientRecyclerView;
+    @Bind(R.id.activity_client_list_fab)
+    FloatingActionButton newClientFab;
+
+    private static final String STATE_CLIENT_LIST = "STATE_CLIENT_LIST";
+    private static final String IS_NEW_CLIENT = "IS_NEW_CLIENT";
+
+    static final int PICK_CONTACT_REQUEST = 69;
+
+    private String contactID;
+
+    private ClientListAdapter clientListAdapter;
+    private RealmResults<Client> results;
+    private Realm realm;
+
+
+    /**
+     * Intent to start Client List from another Activity with the new Client Dialog Active
+     */
     public static Intent startClientListNewClient(Context context, boolean isNewClient) {
+
         Intent intent = new Intent(context, ClientList.class);
         intent.putExtra(IS_NEW_CLIENT, isNewClient);
         return intent;
@@ -82,6 +82,7 @@ public class ClientList extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         if (getIntent().getBooleanExtra(IS_NEW_CLIENT, false)) {
             //start CreateClientDialog for new Client
@@ -95,6 +96,7 @@ public class ClientList extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
         Log.d(Logger.TAG, "ClientList onDestroy()");
         realm.close();
@@ -103,7 +105,7 @@ public class ClientList extends BaseActivity {
 
     private void setupData() {
 
-        realmConfig = new RealmConfiguration.Builder(this)
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this)
                 .name(getResources()
                         .getString(R.string.app_name))
                 .build();
@@ -112,21 +114,13 @@ public class ClientList extends BaseActivity {
 
     private void setUpRecycler() {
         //initialize recycler
-        // Get a Realm instance for this thread
-/*
-        realmRecyclerView = (RealmRecyclerView) findViewById(R.id.realm_recycler_view);
-
-        resetRealm();
-        Realm.setDefaultConfiguration(getRealmConfig());
-            realm = Realm.getDefaultInstance();*/
 
         results = realm.where(Client.class).findAllSorted("name");
-//        FreeLancerDatabaseAdapter freeLancerDatabaseAdapter = new FreeLancerDatabaseAdapter(this);
-     /*    mRealmAdapter = new ClientListRealmAdapter(this, results, true, true);
-        realmRecyclerView.setAdapter(mRealmAdapter);*/
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         clientRecyclerView.setHasFixedSize(true);
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         clientRecyclerView.setLayoutManager(layoutManager);
+
         clientListAdapter = new ClientListAdapter(this, realm, results);
         results.addChangeListener(new RealmChangeListener() {
             @Override
@@ -135,22 +129,7 @@ public class ClientList extends BaseActivity {
                 results.removeChangeListener(this);
             }
         });
-  /*      ClientListRealmAdapter clientListRealmAdapter = new ClientListRealmAdapter(this, results, true, true);
-        clientRecyclerView.setAdapter(clientListRealmAdapter);
 
-
-        listClient = freeLancerDatabaseAdapter.getClientList();
-
-
-        for (Client c : results) {
-            listClient.add(c);
-        }
-        //Open Create Client Dialog if DataBase is Empty
-        if (listClient.isEmpty()) {
-            CreateClientDialog.newInstance(null, CreateClientDialog.NEW_CLIENT)
-                    .show(getSupportFragmentManager(), null);
-        }
-        clientListAdapter.setList(listClient);*/
         clientRecyclerView.setAdapter(clientListAdapter);
 
     }
@@ -164,76 +143,24 @@ public class ClientList extends BaseActivity {
 
     @Override
     protected void onResume() {
+
         Log.d(Logger.TAG, "ClientList onResume");
         super.onResume();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+
         super.onSaveInstanceState(outState, outPersistentState);
-/*
-        outState.putParcelable(STATE_CLIENT_LIST, clientRecyclerView.getLayoutManager().onSaveInstanceState());
-*/
         clientRecyclerView.setSaveEnabled(true);
         Log.d(Logger.TAG, "ClientList onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
         super.onRestoreInstanceState(savedInstanceState);
-        Parcelable state = savedInstanceState.getParcelable(STATE_CLIENT_LIST);
-/*
-        clientRecyclerView.getLayoutManager().onRestoreInstanceState(state);
-*/
         Log.d(Logger.TAG, "ClientList onRestoreInstanceState");
-    }
-
-    @Subscribe
-    public void onEditClientClickedEvent(EditClientClickedEvent event) {
-        CreateClientDialog.newInstance(event.getEditClientName(), CreateClientDialog.EDIT_CLIENT)
-                .show(getSupportFragmentManager(), null);
-/*
-        realm.close();
-*/
-    }
-
-    @Subscribe
-    public void onReturnFromEditorEvent(ReturnFromEditorEvent event) {
-/*
-        clientListAdapter.notifyDataSetChanged();
-*/
-        clientListAdapter.updateResults(results);
-        Log.d(Logger.TAG, "ClientList onReturnFromEditorEvent");/*
-        setupData();
-        setUpRecycler();*/
-    }
-
-    private RealmConfiguration getRealmConfig() {
-        return new RealmConfiguration
-                .Builder(this)
-                .setModules(Realm.getDefaultModule())
-                .name(getResources().getString(R.string.app_name)).build();
-    }
-
-    private void resetRealm() {
-        Realm.deleteRealm(getRealmConfig());
-    }
-
-    @OnClick(R.id.activity_client_list_fab)
-    public void newClient() {
-        CreateClientDialog.newInstance(null, CreateClientDialog.NEW_CLIENT)
-                .show(getSupportFragmentManager(), null);
- /*   realm.close();
-*/
-        //ttry start activity for result
-
-    }
-
-    @Subscribe
-    public void pickContactFromPhone(PickContactFromPhoneEvent event) {
-        Log.d(Logger.TAG, "ClientList pickContactFromPhoneEvent");
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
 
     @Override
@@ -247,31 +174,57 @@ public class ClientList extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.activity_client_list_fab)
+    public void newClient() {
+
+        CreateClientDialog.newInstance(null, CreateClientDialog.NEW_CLIENT)
+                .show(getSupportFragmentManager(), null);
+    }
+
+    @Subscribe
+    public void onEditClientClickedEvent(EditClientClickedEvent event) {
+
+        CreateClientDialog.newInstance(event.getEditClientName(), CreateClientDialog.EDIT_CLIENT)
+                .show(getSupportFragmentManager(), null);
+    }
+
+    @Subscribe
+    public void onReturnFromEditorEvent(ReturnFromEditorEvent event) {
+
+        clientListAdapter.updateResults(results);
+        Log.d(Logger.TAG, "ClientList onReturnFromEditorEvent");
+    }
+
+    @Subscribe
+    public void pickContactFromPhone(PickContactFromPhoneEvent event) {
+        Log.d(Logger.TAG, "ClientList pickContactFromPhoneEvent");
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, PICK_CONTACT_REQUEST);
+    }
+
     @Subscribe
     public void clientPhoneClickedEvent(final ClientPhoneClickedEvent event) {
         //open dialog to choose phone or sms
+
         Log.d(Logger.TAG, "ClientList, clientPhoneClickedEvent() for: " + event.getClientName() + ", " + event.getPhoneNumber());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(getResources().getDrawable(R.drawable.freelacer_no_bg));
         builder.setTitle("Phone or Text")
                 .setMessage(getString(R.string.dialog_message_phone) + " " + event.getClientName())
                 .setPositiveButton("Phone", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Open Phone
+                        //Check phone permission
 
                         if (ActivityCompat.checkSelfPermission(Freelancer.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
                             ActivityCompat.requestPermissions(ClientList.this,
                                     new String[]{Manifest.permission.CALL_PHONE},
                                     201);
                         } else {
+                            //Call
+
                             Toast.makeText(Freelancer.getContext(), "Call " + event.getClientName(), Toast.LENGTH_SHORT).show();
 
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -280,26 +233,14 @@ public class ClientList extends BaseActivity {
                         }
                     }
                 }).setNegativeButton("Text", new DialogInterface.OnClickListener() {
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Open Sms
+                //Text
+
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                 sendIntent.setData(Uri.parse("sms:" + event.getPhoneNumber()));
                 startActivity(sendIntent);
-/*
-                Intent eventIntentMessage = getPackageManager()
-                        .getLaunchIntentForPackage(Telephony.Sms.getDefaultSmsPackage(Freelancer.getContext()));
-
-                eventIntentMessage.putExtra("address", event.getPhoneNumber());
-                startActivity(eventIntentMessage);
-
-
-
-                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("address", event.getPhoneNumber());
-                startActivity(smsIntent);
-*/
 
                 Toast.makeText(Freelancer.getContext(), "Text " + event.getClientName(), Toast.LENGTH_SHORT).show();
             }

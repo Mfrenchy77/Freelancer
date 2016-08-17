@@ -1,7 +1,7 @@
 package com.frenchfriedtechnology.freelancer.Common;
 
 /**
- * Created by matteo on 1/25/16.
+ * Logging Tag
  */
 public interface Logger {
     String TAG = "Freelancer";

@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by matteo on 3/10/16.
+ * Realm Database Object for a client
  */
 public class Client extends RealmObject {
 
@@ -18,11 +18,7 @@ public class Client extends RealmObject {
     private String rate;
     private String recurrence;
     private String notes;
-/*
 
-    public Client() {
-    }
-*/
 
     public int getId() {
         return id;

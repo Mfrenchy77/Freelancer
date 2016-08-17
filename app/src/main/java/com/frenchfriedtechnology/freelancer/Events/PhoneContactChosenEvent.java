@@ -1,6 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-import android.net.Uri;
 
 /**
  * Created by matteo on 3/3/16.
