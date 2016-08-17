@@ -56,9 +56,9 @@ public class UpdateLog extends BaseActivity {
     @Bind(R.id.log_expenses)
     EditText textExpenses;
     @Bind(R.id.log_notes)
-    private EditText textNotes;
+    EditText textNotes;
     @Bind(R.id.log_select_clients)
-    private TextView textClients;
+    TextView textClients;
 
     private String format = "MM/dd/yy";
     private SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);

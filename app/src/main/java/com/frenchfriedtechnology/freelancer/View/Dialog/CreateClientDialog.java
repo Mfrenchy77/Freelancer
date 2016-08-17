@@ -2,10 +2,7 @@ package com.frenchfriedtechnology.freelancer.View.Dialog;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
@@ -28,9 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frenchfriedtechnology.freelancer.Common.BusProvider;
-import com.frenchfriedtechnology.freelancer.Common.CircularAnimUtil;
 import com.frenchfriedtechnology.freelancer.Common.Logger;
-import com.frenchfriedtechnology.freelancer.Database.FreeLancerDatabaseAdapter;
 import com.frenchfriedtechnology.freelancer.Events.DayChosenEvent;
 import com.frenchfriedtechnology.freelancer.Events.PhoneContactChosenEvent;
 import com.frenchfriedtechnology.freelancer.Events.PickContactFromPhoneEvent;
@@ -52,12 +47,11 @@ import io.realm.RealmResults;
 /**
  * Dialog to create a new client or to edit an existing client
  */
-
 public class CreateClientDialog extends DialogFragment {
+
     @StringDef({NEW_CLIENT, EDIT_CLIENT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Tags {
-
     }
 
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -69,31 +63,24 @@ public class CreateClientDialog extends DialogFragment {
 
     private TextInputEditText clientName, clientNameTwo, clientRecurrence,
             clientEmail, clientPhone, clientAddress, clientRate, clientNotes;
-    private LinearLayout createButton, cancelButton, root;
     private Button chooseFromContactsButton;
-    /*
-        private TextView clientRecurrence;
-    */
-    private ImageButton deleteClient;
 
     private boolean contactsAllowed = true;
 
     public static CreateClientDialog newInstance(String clientName, @StringRes String tag) {
+
         Bundle bundle = new Bundle();
         bundle.putString(CLIENT, clientName);
         bundle.putString(TAG, tag);
 
         CreateClientDialog dialog = new CreateClientDialog();
         dialog.setArguments(bundle);
-
         return dialog;
     }
 
     private String editClientName;
     private String tag;
-    private AlertDialog dialog;
     private Realm realm;
-    private RealmConfiguration realmConfig;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,34 +103,35 @@ public class CreateClientDialog extends DialogFragment {
         final View view = inflater.inflate(R.layout.dialog_create_client, fl, false);
         fl.addView(view);
 
-        root = (LinearLayout) view.findViewById(R.id.create_client_root);
-        chooseFromContactsButton = (Button) view.findViewById(R.id.choose_from_contacts_button);
         clientRecurrence = (TextInputEditText) view.findViewById(R.id.create_client_recurrence_button);
+        chooseFromContactsButton = (Button) view.findViewById(R.id.choose_from_contacts_button);
         clientAddress = (TextInputEditText) view.findViewById(R.id.client_location);
         clientNameTwo = (TextInputEditText) view.findViewById(R.id.client_name_2);
-        cancelButton = (LinearLayout) view.findViewById(R.id.cancel_create_button);
         clientNotes = (TextInputEditText) view.findViewById(R.id.client_notes);
         clientName = (TextInputEditText) view.findViewById(R.id.client_name_1);
         clientEmail = (TextInputEditText) view.findViewById(R.id.client_email);
         clientPhone = (TextInputEditText) view.findViewById(R.id.client_phone);
         clientRate = (TextInputEditText) view.findViewById(R.id.client_rate);
-/*
-        clientRecurrence = (TextView) view.findViewById(R.id.client_recurrence);
-*/
-        createButton = (LinearLayout) view.findViewById(R.id.create_button);
-        deleteClient = (ImageButton) view.findViewById(R.id.delete_client_button);
+
+        LinearLayout cancelButton = (LinearLayout) view.findViewById(R.id.cancel_create_button);
+        ImageButton deleteClient = (ImageButton) view.findViewById(R.id.delete_client_button);
+        LinearLayout createButton = (LinearLayout) view.findViewById(R.id.create_button);
+
         clientName.requestFocus();
         checkForContactsPermission();
 
-        //If editing client add the fields
+        //If editing client populate fields
         if (tag.equals(EDIT_CLIENT)) {
+
             setupData();
             deleteClient.setVisibility(View.VISIBLE);
             Log.d(Logger.TAG, "CreateClientDialog Edit Client: " + editClientName);
+
             RealmResults<Client> results = realm.where(Client.class)
                     .contains("name", editClientName)
                     .findAll();
             for (final Client client : results) {
+
                 clientName.setText(client.getName());
                 clientNameTwo.setText(client.getName2());
                 clientEmail.setText(client.getEmail());
@@ -152,10 +140,12 @@ public class CreateClientDialog extends DialogFragment {
                 clientRate.setText(client.getRate());
                 clientRecurrence.setText(client.getRecurrence());
                 clientNotes.setText(client.getNotes());
+
                 deleteClient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getActivity(), clientName.getText() + " deleted", Toast.LENGTH_SHORT).show();
+
                         realm.beginTransaction();
                         client.removeFromRealm();
                         realm.commitTransaction();
@@ -163,13 +153,11 @@ public class CreateClientDialog extends DialogFragment {
                     }
                 });
             }
-/*
-            realm.close();
-*/
         } else setupData();
         clientRate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 clientRecurrence.callOnClick();
                 return true;
             }
@@ -178,6 +166,7 @@ public class CreateClientDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //pick a day of the week
+
                 DialogFrequencyPicker.newInstance(R.string.create_client_recurrence_title
                         , DialogFrequencyPicker.CHOSE_CLIENT_RECURRENCE,
                         tag.equals(NEW_CLIENT) ? null : clientRecurrence.getText().toString())
@@ -187,6 +176,7 @@ public class CreateClientDialog extends DialogFragment {
         clientNotes.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 createClient();
                 return true;
             }
@@ -194,40 +184,36 @@ public class CreateClientDialog extends DialogFragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 createClient();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 cancel();
             }
         });
-
         chooseFromContactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 BusProvider.Instance.getBus().post(new PickContactFromPhoneEvent());
-               /*  Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT_REQUEST);
-
-               Log.d(Logger.TAG, "Contacts Allowed? " + contactsAllowed);
-                if (contactsAllowed) { //open contacts list and populate fields on selection
-                    Toast.makeText(getActivity(), "Open Contacts", Toast.LENGTH_SHORT).show();
-                    new ContactFromPhoneDialog().show(getFragmentManager(), null);
-                } else checkForContactsPermission();*/
             }
         });
 
-        //set the contact autocomplete        clientName.setAdapter(new );
         builder.setView(fl);
-        dialog = builder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                CircularAnimUtil.dialogReveal(view, true, null);
-            }
-        });
+        AlertDialog dialog = builder.create();
+
+        // FIXME: 17/08/16 not really working correctly
+//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//            @Override
+//            public void onShow(DialogInterface dialog) {
+//
+//                CircularAnimUtil.dialogReveal(view, true, null);
+//            }
+//        });
 
         BusProvider.Instance.getBus().register(this);
         ButterKnife.bind(getActivity());
@@ -235,19 +221,18 @@ public class CreateClientDialog extends DialogFragment {
         dialog.show();
 
         return dialog;
-
     }
 
     private void setupData() {
 
-        realmConfig = new RealmConfiguration.Builder(Freelancer.getContext()).name(getResources()
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(Freelancer.getContext()).name(getResources()
                 .getString(R.string.app_name)).build();
 
         realm = Realm.getInstance(realmConfig);
-
     }
 
     private void checkForContactsPermission() {
+
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_CONTACTS);
 
@@ -264,7 +249,6 @@ public class CreateClientDialog extends DialogFragment {
                 // sees the explanation, try again to request the permission.
 
             } else {
-
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(getActivity(),
@@ -280,8 +264,10 @@ public class CreateClientDialog extends DialogFragment {
 
     @Subscribe
     public void daysChosenEvent(DayChosenEvent event) {
+
         if (DialogFrequencyPicker.CHOSE_CLIENT_RECURRENCE.equals(event.getTag())) {
             Log.d(Logger.TAG, "BUS FOR - " + event.getTag() + "\n" + event.getText());
+
             clientRecurrence.setText(event.getText());
             clientNotes.requestFocus();
         }
@@ -290,6 +276,7 @@ public class CreateClientDialog extends DialogFragment {
     @Subscribe
     public void contactFromPhoneEvent(PhoneContactChosenEvent event) {
         Log.d(Logger.TAG, "CreateClientDialog contactFromPhoneEvent for: " + event.getContactName());
+
         clientName.setText(event.getContactName());
         clientNameTwo.setText(event.getContactName2());
         clientEmail.setText(event.getContactEmail());
@@ -300,6 +287,7 @@ public class CreateClientDialog extends DialogFragment {
 
     @OnEditorAction(R.id.client_rate)
     boolean onSelectRecurrence() {
+
         DialogFrequencyPicker.newInstance(R.string.create_client_recurrence_title
                 , DialogFrequencyPicker.CHOSE_CLIENT_RECURRENCE,
                 tag.equals(NEW_CLIENT) ? null : clientRecurrence.getText().toString())
@@ -309,11 +297,13 @@ public class CreateClientDialog extends DialogFragment {
 
     @OnEditorAction(R.id.client_notes)
     boolean onFinished() {
+
         createClient();
         return true;
     }
 
     public void createClient() {
+
         setupData();
         String name = clientName.getText().toString();
         String name2 = clientNameTwo.getText().toString();
@@ -328,6 +318,7 @@ public class CreateClientDialog extends DialogFragment {
             recurrence = "";
         }
         String notes = clientNotes.getText().toString();
+
         //take info and store it in DataBase
         if (!TextUtils.isEmpty(name)) {
 
@@ -345,33 +336,17 @@ public class CreateClientDialog extends DialogFragment {
             realm.copyToRealmOrUpdate(client);
             realm.commitTransaction();
 
-/*
-            realm.close();
-*/
             if (tag.equals(EDIT_CLIENT)) {
-
                 Toast.makeText(getActivity(), "Edited " + clientName.getText(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "New Client " + clientName.getText() + " saved", Toast.LENGTH_SHORT).show();
             }
 
-
-//          Switched to Realm for Database, but keeping original code to show how SQL works
-
-//            long id = freeLancerDatabaseAdapter
-//                    .insertDataClientList(name, name2, email, phone, address, rate, recurrence, notes);
-//            if (id < 0) {
-//                //Error
-//                Toast.makeText(Freelancer.getContext(), "Error Creating New Client", Toast.LENGTH_SHORT).show();
-//            } else {
-//                //success
-//            }
-
             dismiss();
         } else {
             Toast.makeText(getActivity(), "No Name Entered", Toast.LENGTH_SHORT).show();
-            clientName.requestFocus();
 
+            clientName.requestFocus();
         }
     }
 
@@ -382,57 +357,32 @@ public class CreateClientDialog extends DialogFragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
 
         Log.d(Logger.TAG, "Permission Results: " + requestCode + " " + permissions + " " + grantResults);
         switch (requestCode) {
             case REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
+
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     chooseFromContactsButton.setVisibility(View.VISIBLE);
                     chooseFromContactsButton.setClickable(true);
                     contactsAllowed = true;
                     Log.d(Logger.TAG, "Permission? " + contactsAllowed);
-
                 } else {
                     Log.d(Logger.TAG, "Permission? " + contactsAllowed);
+
                     contactsAllowed = false;
                     chooseFromContactsButton.setClickable(false);
                     chooseFromContactsButton.setVisibility(View.GONE);
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
-    }/*
-
-    public void setContact(Uri contactLookupUri) {
-        mContactUri = contactLookupUri;
-
-
     }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }*/
 
     @Override
     public void dismiss() {
