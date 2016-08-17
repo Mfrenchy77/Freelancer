@@ -74,5 +74,7 @@
     <string name="contacts_list_search_results_title">Contacts List Search for \\\"%s\\\"</string>
     <string name="title_activity_yearly_total">Year to Date</string>
     <string name="dialog_message_phone">Call or Text, </string>
+    <string name="play_text">Play</string>
+    <string name="pause_text">Pause</string>
 
 </resources>

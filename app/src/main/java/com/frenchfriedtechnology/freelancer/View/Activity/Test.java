@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.frenchfriedtechnology.freelancer.R;
 
+// FIXME: 17/08/16 currently a place holder activity, replace with create and export PDF of Daily Log
+
 public class Test extends AppCompatActivity {
 
     @Override

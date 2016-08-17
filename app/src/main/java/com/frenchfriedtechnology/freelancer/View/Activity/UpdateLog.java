@@ -6,13 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.TextUtils;
-import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,14 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frenchfriedtechnology.freelancer.Common.Logger;
-import com.frenchfriedtechnology.freelancer.Database.FreeLancerDatabaseAdapter;
 import com.frenchfriedtechnology.freelancer.Events.NamesChosenEvent;
 import com.frenchfriedtechnology.freelancer.R;
 import com.frenchfriedtechnology.freelancer.Realm.LogEntry;
 import com.frenchfriedtechnology.freelancer.View.Dialog.DialogSelectClients;
 import com.squareup.otto.Subscribe;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -43,17 +37,12 @@ import io.realm.RealmConfiguration;
  * from user's Client List Table
  */
 public class UpdateLog extends BaseActivity {
-    private String format = "MM/dd/yy";
-    private SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-    private DateFormat fmtDateAndTime = DateFormat.getDateInstance(DateFormat.MEDIUM);
-    private FreeLancerDatabaseAdapter freeLancerDatabaseAdapter;
-    private Calendar currentDate = Calendar.getInstance();
-    private DatePickerDialog datePickerDialog;
-    private Realm realm;
-    private RealmConfiguration realmConfig;
 
-    private String date, clients, cash, check, mileage, expenses, notes;
-    private TextView textClients;
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_update_log;
+    }
+
     @Bind(R.id.root)
     CoordinatorLayout root;
     @Bind(R.id.log_current_date)
@@ -67,41 +56,29 @@ public class UpdateLog extends BaseActivity {
     @Bind(R.id.log_expenses)
     EditText textExpenses;
     @Bind(R.id.log_notes)
-    EditText textNotes;
+    private EditText textNotes;
+    @Bind(R.id.log_select_clients)
+    private TextView textClients;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_update_log;
-    }
+    private String format = "MM/dd/yy";
+    private SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+    private Calendar currentDate = Calendar.getInstance();
+
+    private String date, clients, cash, check, mileage, expenses, notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-/*
-        freeLancerDatabaseAdapter = new FreeLancerDatabaseAdapter(this);
-*/
-        setupWindowAnimations();
-        textClients = (TextView) findViewById(R.id.log_select_clients);
+
         textDate.setText(sdf.format(currentDate.getTime()));
-
-
     }
-    private void setupWindowAnimations() {
-        Fade fade = new Fade();
-        fade.setDuration(800);
 
-        Slide slide = new Slide(Gravity.LEFT);
-        slide.setInterpolator(new FastOutSlowInInterpolator());
-        slide.setDuration(1000);
-
-        getWindow().setEnterTransition(fade);
-    }
     /**
      * Image Button to update Daily Log
      */
     public void upDateButton(View view) {
-        //update the DailyLog Table with selected
+
         updateLog();
     }
 
@@ -110,18 +87,16 @@ public class UpdateLog extends BaseActivity {
      * and the sets the names into the TextView
      */
     public void selectClients(View view) {
-        //open dialog to choose which clients worked for the day
-        DialogSelectClients.newInstance(DialogSelectClients.MULTI).show(getSupportFragmentManager(), null);
 
-//        Toast.makeText(this, "Select Clients Clicked", Toast.LENGTH_SHORT).show();
+        DialogSelectClients.newInstance(DialogSelectClients.MULTI).show(getSupportFragmentManager(), null);
     }
 
     /**
      * Opens Date picker Dialog to choose date
      */
-
     @OnClick(R.id.log_current_date)
     void onChooseDate() {
+
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -130,6 +105,7 @@ public class UpdateLog extends BaseActivity {
                 textDate.setText(sdf.format(newDate.getTime()));
             }
         };
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, onDateSetListener, currentDate.get(Calendar.YEAR),
                 currentDate.get(Calendar.MONTH),
                 currentDate.get(Calendar.DAY_OF_MONTH));
@@ -142,6 +118,7 @@ public class UpdateLog extends BaseActivity {
      */
     @OnEditorAction(R.id.log_notes)
     boolean onNotesAction() {
+
         updateLog();
         return true;
     }
@@ -150,7 +127,8 @@ public class UpdateLog extends BaseActivity {
      * Bus event receiving the selections from the dialog and inserting into TextView
      */
     @Subscribe
-    public void onRecieveSelectedClients(NamesChosenEvent event) {
+    public void onReceiveSelectedClients(NamesChosenEvent event) {
+
         Log.d(Logger.TAG, "BUS RECEIVED = " + event.getNames());
         textClients.setText(event.getNames());
     }
@@ -184,24 +162,21 @@ public class UpdateLog extends BaseActivity {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendToDB();
-
-
-/*
-                        onBackPressed();
-*/
+                        saveDailyLog();
                     }
                 }).show();
     }
 
     /**
-     * Method to send data to Daily Log Table
+     * Save Daily Log in Realm Database
      */
-    public void sendToDB() {
+    public void saveDailyLog() {
         // Get a Realm instance for this thread
-        realmConfig = new RealmConfiguration.Builder(this).name(getResources()
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).name(getResources()
                 .getString(R.string.app_name)).build();
-        realm = Realm.getInstance(realmConfig);
+        Realm realm = Realm.getInstance(realmConfig);
+
         LogEntry logEntry = new LogEntry();
         logEntry.setDay(date);
         logEntry.setClientsForDay(clients);
@@ -211,7 +186,6 @@ public class UpdateLog extends BaseActivity {
         logEntry.setExpenses(expenses);
         logEntry.setNotes(notes);
 
-
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(logEntry);
         realm.commitTransaction();
@@ -219,15 +193,6 @@ public class UpdateLog extends BaseActivity {
 
         Toast.makeText(this, "Updated Daily Log for " + date, Toast.LENGTH_SHORT).show();
         onBackPressed();
-
-        //Switched to Realm for Database use
-//        long id = freeLancerDatabaseAdapter.insertDataDailyLog(date, clients, cash, check, mileage, expenses);
-//        if (id < 0) {
-//            //Error
-//            Toast.makeText(this, "Error Updating Daily Log", Toast.LENGTH_SHORT).show();
-//        } else {
-//            //success
-//        }
     }
 
     /**

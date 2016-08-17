@@ -55,9 +55,6 @@
                 android:value="com.frenchfriedtechnology.freelancer.View.Activity.MainActivity"/>
         </activity>
         <activity
-            android:name=".View.Activity.LoginActivity"
-            android:label="@string/title_activity_login"/>
-        <activity
             android:name=".View.Activity.ClientList"
             android:label="@string/title_activity_client_list"
             android:parentActivityName=".View.Activity.MainActivity"

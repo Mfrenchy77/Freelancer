@@ -1,36 +1,24 @@
 package com.frenchfriedtechnology.freelancer.View.Activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.DatePickerDialog;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.frenchfriedtechnology.freelancer.Common.CircularAnimUtil;
 import com.frenchfriedtechnology.freelancer.Common.Logger;
 import com.frenchfriedtechnology.freelancer.Common.UserPrefs;
 import com.frenchfriedtechnology.freelancer.Events.NamesChosenEvent;
-import com.frenchfriedtechnology.freelancer.Freelancer;
 import com.frenchfriedtechnology.freelancer.R;
-import com.frenchfriedtechnology.freelancer.Realm.Client;
 import com.frenchfriedtechnology.freelancer.View.Dialog.DialogSelectClients;
 import com.squareup.otto.Subscribe;
 
@@ -47,7 +35,12 @@ import butterknife.OnLongClick;
  * to charge. ~~~Also, options to generate a bill pdf/email?~~
  */
 public class TimedSession extends BaseActivity {
-    private static final String ACTIVITY_TAG = "TimedSession";
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_timed_session;
+    }
+
     @Bind(R.id.root)
     CoordinatorLayout root;
     @Bind(R.id.recording_text)
@@ -69,18 +62,15 @@ public class TimedSession extends BaseActivity {
     @Bind(R.id.session_rate)
     TextView sessionRate;
 
+    private static final String ACTIVITY_TAG = "TimedSession";
+
     private String format = "MM/dd/yy";
-    private SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-    private UserPrefs userPrefs = new UserPrefs();
-    private Calendar currentDate = Calendar.getInstance();
     private boolean sessionActive = false;
     private long timeWhenStopped = 0;
-    private long duration = 200;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_timed_session;
-    }
+    private SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+    private Calendar currentDate = Calendar.getInstance();
+    private UserPrefs userPrefs = new UserPrefs();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,30 +84,29 @@ public class TimedSession extends BaseActivity {
 
     public void startSession(View view) {
         //start pause session
+
         if (sessionClient.getText().equals("")) {
             onClickSelectClient();
         } else if (!sessionActive) {
+
             CircularAnimUtil.enterReveal(recordingText);
             chronometer.setBase(SystemClock.elapsedRealtime()
                     - userPrefs.getTimedSessionCurrentRecordedTime());
             chronometer.start();
- /*           CircularAnimUtil.switchReveal(startImage, pauseImage);
-*/
             startImage.setImageResource(R.drawable.vector_pause);
 
-            startText.setText("Pause");
+            startText.setText(R.string.pause_text);
             sessionActive = true;
             userPrefs.setTimedSessionRunning(sessionActive);
         } else {
+
             CircularAnimUtil.exitReveal(recordingText);
             chronometer.stop();
             timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
             chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-  /*          CircularAnimUtil.switchReveal(pauseImage, startImage);
-*/
             startImage.setImageResource(R.drawable.vector_play);
 
-            startText.setText("Play");
+            startText.setText(R.string.play_text);
             sessionActive = false;
             long positiveTime = Math.abs(timeWhenStopped);
             userPrefs.setTimedSessionCurrentRecordedTime(positiveTime);
@@ -135,7 +124,7 @@ public class TimedSession extends BaseActivity {
             sessionActive = false;
 
             startImage.setImageResource(R.drawable.vector_play);
-            startText.setText("Play");
+            startText.setText(R.string.play_text);
         }
         chronometer.stop();
         chronometer.setBase(SystemClock.elapsedRealtime());
@@ -151,9 +140,9 @@ public class TimedSession extends BaseActivity {
     /**
      * Opens Date picker Dialog to choose date
      */
-
     @OnClick(R.id.session_date)
     void onChooseDate() {
+
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -162,6 +151,7 @@ public class TimedSession extends BaseActivity {
                 sessionDate.setText(sdf.format(newDate.getTime()));
             }
         };
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, onDateSetListener, currentDate.get(Calendar.YEAR),
                 currentDate.get(Calendar.MONTH),
                 currentDate.get(Calendar.DAY_OF_MONTH));
@@ -171,18 +161,21 @@ public class TimedSession extends BaseActivity {
     @OnClick(R.id.session_select_client)
     void onClickSelectClient() {
         //open select client dialog and populate rate field with selection
+
         DialogSelectClients.newInstance(DialogSelectClients.SINGLE).show(getSupportFragmentManager(), null);
 
     }
 
     public void saveSession(View view) {
         //save session
+
         Snackbar.make(root, "save Session", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //Logic to record Time if Session is running
 
         chronometer.stop();
         if (sessionActive) timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
@@ -199,6 +192,8 @@ public class TimedSession extends BaseActivity {
 
     @Override
     protected void onResume() {
+        //Logic to resume chronometer if session is running
+
         startText.setText(userPrefs.isTimedSessionRunning() ?
                 "Pause" :
                 "Play");
@@ -206,6 +201,7 @@ public class TimedSession extends BaseActivity {
                 R.drawable.vector_pause :
                 R.drawable.vector_play);
         super.onResume();
+
         long pausedTime = userPrefs.getTimedSessionPauseTime();
         Calendar calendar = Calendar.getInstance();
         long currentTime = calendar.getTimeInMillis();
@@ -235,52 +231,6 @@ public class TimedSession extends BaseActivity {
                 + recordedTime + "\n newTime: "
                 + newTime);
     }
-/*
-    private void enterReveal(View view) {
-        int cx = view.getMeasuredWidth() / 2;
-        int cy = view.getMeasuredHeight() / 2;
-
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(view.getWidth(), view.getHeight()) / 2;
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
-        anim.setInterpolator(new AccelerateInterpolator());
-        anim.setDuration(duration);
-        // make the view visible and start the animation
-        view.setVisibility(View.VISIBLE);
-        anim.start();
-    }
-
-    private void exitReveal(final View view) {
-        Log.d(Logger.TAG, ACTIVITY_TAG + " exitReveal() ");
-
-        // get the center for the clipping circle
-        int cx = view.getWidth() / 2;
-        int cy = view.getHeight() / 2;
-
-// get the initial radius for the clipping circle
-        float initialRadius = (float) Math.hypot(cx, cy);
-
-// create the animation (the final radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
-        anim.setInterpolator(new AccelerateInterpolator());
-        anim.setDuration(duration);
-
-// make the view invisible when the animation is done
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-
-// start the animation
-        anim.start();
-    }*/
 
     @Subscribe
     public void onNamesChosenEvent(NamesChosenEvent event) {
