@@ -38,104 +38,88 @@ import io.realm.RealmResults;
 // TODO: 2/4/16 keep woking on the auto populate feature
 
 /**
- * ListView the receives the names of clients from the Client List and returns int to the
- * Daily log Text Field. Auto populates if the current day matched and of the recurrence fields
- * in the Client List table
+ * Dialog for selecting users clients from a list. Auto populate selection based on day
  */
 public class DialogSelectClients extends DialogFragment {
+
     @StringDef({MULTI, SINGLE})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Tags {
-
-    }
+    public @interface Tags {}
 
     public static final String MULTI = "MULTI";
     public static final String SINGLE = "SINGLE";
     public static final String TAG = "TAG";
+    public static final String DAY= "DAY";
 
-    public static DialogSelectClients newInstance(@StringRes String tag) {
+    public static DialogSelectClients newInstance(@StringRes String tag, String day) {
 
         Bundle bundle = new Bundle();
         bundle.putString(TAG, tag);
+        bundle.putString(DAY,day);
         DialogSelectClients fragment = new DialogSelectClients();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    private ListView clientNameList;
     private ArrayList<String> clients = new ArrayList<>();
-
-    private String tag;
+    private ListView clientNameList;
     private Realm realm;
-    private RealmConfiguration realmConfig;
+    private String tag;
+    private String day;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         tag = getArguments().getString(TAG);
+        day = getArguments().getString(DAY);
         super.onCreate(savedInstanceState);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getResources().getString(R.string.update_log_title));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_frequency, null);
         builder.setView(view);
+
         clientNameList = (ListView) view.findViewById(R.id.dialog_frequency_list);
         clientNameList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        realmConfig = new RealmConfiguration.Builder(Freelancer.getContext()).name(getResources()
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(Freelancer.getContext()).name(getResources()
                 .getString(R.string.app_name)).build();
 
         realm = Realm.getInstance(realmConfig);
         final RealmResults<Client> results = realm.where(Client.class).findAllSorted("name");
+
         ArrayList<String> recurrence = new ArrayList<>();
         for (Client c : results) {
             clients.add(c.getName() + "\n" + c.getName2() + "\n");
             recurrence.add(c.getRecurrence());
 
         }
-        Log.d(Logger.TAG, "CLIENT_NAMES = " + clients/*freeLancerDatabaseAdapter.getClientNames()*/);
-        if (tag.equals(MULTI)) {
 
-        }
-        final ArrayAdapter<String> adapter = tag.equals(MULTI) ? new ArrayAdapter<String>(
+        //set single or multiple choice adapter
+        final ArrayAdapter<String> adapter = tag.equals(MULTI) ? new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_list_item_multiple_choice,
-                clients) : new ArrayAdapter<String>(
+                clients) : new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_list_item_single_choice,
                 clients);
 
         clientNameList.setAdapter(adapter);
 
-        ///trying to set the selection if it is saved already
+        //set the selection if it is saved already
         if (tag.equals(MULTI)) {
-            String weekDay;
 
-            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
-
-            Calendar calendar = Calendar.getInstance();
-            weekDay = dayFormat.format(calendar.getTime());
             for (int i = 0; i < clients.size(); i++) {
-                if (recurrence.get(i).contains(weekDay)) {
+                if (recurrence.get(i).contains(day)) {
                     clientNameList.setItemChecked(i, true);
                 }
             }
-        }
-// TODO: 2/4/16 this is where we need to check for recurrence against current day of the week
-        /*if (tag.equals(CHOSE_DAYS_FOR_NOTIFICATION)) {
-            for (int i = 0; i < days.length; i++) {
-                if (new UserPrefs().getNotifyFrequency() != null && new UserPrefs().getNotifyFrequency().contains(daysList.getItemAtPosition(i).toString())) {
-                    Log.d(Logger.TAG, "Day" + i);
-                    daysList.setItemChecked(i, true);
-                }
-            }
-            new UserPrefs().clearNotifyFrequency();
-        }*/
-        if (tag.equals(MULTI)) {
+
             builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -161,8 +145,6 @@ public class DialogSelectClients extends DialogFragment {
                     dismiss();
                 }
             });
-
-
 
 
         }

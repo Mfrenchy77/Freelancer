@@ -1,9 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-
-/**
- * Created by matteo on 2/4/16.
- */
 public class NamesChosenEvent extends BaseUiEvent {
     private final String names;
     private final String rate;

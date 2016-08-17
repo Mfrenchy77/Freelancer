@@ -1,8 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-/**
- * Created by matteo on 3/29/16.
- */
 public class ClientPhoneClickedEvent {
     private String phoneNumber;
     private String clientName;

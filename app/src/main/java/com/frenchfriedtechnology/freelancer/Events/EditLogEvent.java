@@ -1,8 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-/**
- * Created by matteo on 3/24/16.
- */
 public class EditLogEvent {
     private String logDayToEdit;
     private int position;

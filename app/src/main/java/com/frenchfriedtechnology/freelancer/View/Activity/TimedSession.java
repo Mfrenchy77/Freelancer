@@ -162,7 +162,7 @@ public class TimedSession extends BaseActivity {
     void onClickSelectClient() {
         //open select client dialog and populate rate field with selection
 
-        DialogSelectClients.newInstance(DialogSelectClients.SINGLE).show(getSupportFragmentManager(), null);
+        DialogSelectClients.newInstance(DialogSelectClients.SINGLE, null).show(getSupportFragmentManager(), null);
 
     }
 

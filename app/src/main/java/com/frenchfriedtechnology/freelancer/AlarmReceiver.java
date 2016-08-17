@@ -6,11 +6,8 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.frenchfriedtechnology.freelancer.Common.Logger;
 import com.frenchfriedtechnology.freelancer.Common.UserPrefs;

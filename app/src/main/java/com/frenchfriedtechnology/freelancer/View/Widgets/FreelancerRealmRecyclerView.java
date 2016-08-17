@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import io.realm.internal.Util;
 
 /**
  * Created by matteo on 3/29/16.

@@ -22,8 +22,10 @@ import com.frenchfriedtechnology.freelancer.Realm.LogEntry;
 import com.frenchfriedtechnology.freelancer.View.Dialog.DialogSelectClients;
 import com.squareup.otto.Subscribe;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -87,12 +89,20 @@ public class UpdateLog extends BaseActivity {
      * and the sets the names into the TextView
      */
     public void selectClients(View view) {
-
-        DialogSelectClients.newInstance(DialogSelectClients.MULTI).show(getSupportFragmentManager(), null);
+        try {
+            Date date = sdf.parse(textDate.getText().toString());
+            currentDate.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.US);
+        String day = simpleDateFormat.format(currentDate.getTime());
+        Log.d(Logger.TAG, "UpdateLog selectClients() day: " + textDate.getText().toString() +" "+day);
+        DialogSelectClients.newInstance(DialogSelectClients.MULTI, day).show(getSupportFragmentManager(), null);
     }
 
     /**
-     * Opens Date picker Dialog to choose date
+     * Opens Date picker Dialog to choose date and clears selected clients
      */
     @OnClick(R.id.log_current_date)
     void onChooseDate() {
@@ -103,6 +113,7 @@ public class UpdateLog extends BaseActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 textDate.setText(sdf.format(newDate.getTime()));
+                textClients.setText("");
             }
         };
 
@@ -129,7 +140,6 @@ public class UpdateLog extends BaseActivity {
     @Subscribe
     public void onReceiveSelectedClients(NamesChosenEvent event) {
 
-        Log.d(Logger.TAG, "BUS RECEIVED = " + event.getNames());
         textClients.setText(event.getNames());
     }
 

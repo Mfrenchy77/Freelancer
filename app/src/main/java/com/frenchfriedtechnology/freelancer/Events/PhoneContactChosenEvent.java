@@ -1,9 +1,6 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
 
-/**
- * Created by matteo on 3/3/16.
- */
 public class PhoneContactChosenEvent extends BaseUiEvent {
     private final String contactName;
     private final String contactName2;

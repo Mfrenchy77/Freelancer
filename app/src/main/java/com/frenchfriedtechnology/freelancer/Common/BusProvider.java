@@ -1,9 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Common;
 
-/**
- * Created by matteo on 2/4/16.
- */
-
 import com.squareup.otto.Bus;
 
 /**

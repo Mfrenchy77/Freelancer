@@ -9,9 +9,10 @@ import com.frenchfriedtechnology.freelancer.Freelancer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- * Created by matteo on 1/25/16.
+ * Class to access and store users settings
  */
 public class UserPrefs {
 
@@ -78,20 +79,22 @@ public class UserPrefs {
         return getSharedPrefs().getLong(SHARED_PREFS_TIMED_SESSION_CURRENT_RECORDED_TIME, 0);
     }
 
-    public void setTimedSessionClient(String client){
-        Log.d(Logger.TAG,ACTIVITY_TAG+ "setTimedSessionClient() client: "+client);
-        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT,client).apply();
-    }
-    public String getTimedSessionClient(){
-        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT,"");
+    public void setTimedSessionClient(String client) {
+        Log.d(Logger.TAG, ACTIVITY_TAG + "setTimedSessionClient() client: " + client);
+        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT, client).apply();
     }
 
-    public void setTimedSessionClientRate(String rate){
-        Log.d(Logger.TAG,ACTIVITY_TAG+ " setTimedSessionClientRate() rate: "+ rate);
-        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE,rate).apply();
+    public String getTimedSessionClient() {
+        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT, "");
     }
-    public String getTimedSessionClientRate(){
-        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE,"");
+
+    public void setTimedSessionClientRate(String rate) {
+        Log.d(Logger.TAG, ACTIVITY_TAG + " setTimedSessionClientRate() rate: " + rate);
+        editSharedPrefs().putString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE, rate).apply();
+    }
+
+    public String getTimedSessionClientRate() {
+        return getSharedPrefs().getString(SHARED_PREFS_TIMED_SESSION_CLIENT_RATE, "");
     }
 
 
@@ -121,7 +124,7 @@ public class UserPrefs {
      */
     public void setNotifyTime(long notifyTime) {
         Date date = new Date(notifyTime);
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
         String dateFormatted = formatter.format(date);
         Log.d(Logger.TAG, "Notify Time = " + dateFormatted);
         editSharedPrefs().putLong(SHARED_PREFS_NOTIFY_TIME, notifyTime).apply();

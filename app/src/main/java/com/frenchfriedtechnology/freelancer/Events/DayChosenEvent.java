@@ -1,10 +1,5 @@
 package com.frenchfriedtechnology.freelancer.Events;
 
-import java.security.PublicKey;
-
-/**
- * Created by matteo on 2/4/16.
- */
 public class DayChosenEvent extends BaseUiEvent {
 
     private final String text;

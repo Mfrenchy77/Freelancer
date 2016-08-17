@@ -14,9 +14,7 @@ import org.joda.time.DateTimeZone;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by matteo on 1/21/16.
- */
+
 public class Freelancer extends Application {
 
     private static Freelancer instance;
