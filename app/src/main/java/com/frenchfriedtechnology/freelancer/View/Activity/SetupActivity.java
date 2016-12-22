@@ -194,6 +194,8 @@ public class SetupActivity extends BaseActivity implements ImageChooserListener 
         setUpNotifyTime();
     }
 
+
+
     /**
      * ImageView to open Image Chooser
      */

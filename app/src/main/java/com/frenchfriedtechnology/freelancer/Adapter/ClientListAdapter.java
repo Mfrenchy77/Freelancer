@@ -24,8 +24,6 @@ import io.realm.RealmResults;
  */
 
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.ClientViewHolder> {
-    //    private ArrayList<CLObject> listClient = new ArrayList<>();
-    private ArrayList<Client> listClient = new ArrayList<>();
 
     private Context mContext;
     private Realm mRealm;

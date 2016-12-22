@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<ScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -11,14 +11,15 @@
     android:layout_marginStart="6dp"
     android:layout_marginTop="6dp"
     android:fitsSystemWindows="true"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardElevation="6dp"
     tools:context="com.frenchfriedtechnology.freelancer.View.Activity.UpdateLog"
     tools:showIn="@layout/activity_update_log">
 
-    <ScrollView
+    <android.support.v7.widget.CardView
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="6dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:transitionName="update_log"
@@ -193,5 +194,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </ScrollView>
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</ScrollView>
