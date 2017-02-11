@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -121,11 +122,15 @@ public class EditLogDialog extends DialogFragment {
 
         setUpDisplay();
         builder.setView(fl);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.show();
 
         BusProvider.Instance.getBus().register(this);
         ButterKnife.bind(getActivity());
 
-        return builder.create();
+        return dialog;
     }
 
     private void setUpDisplay() {

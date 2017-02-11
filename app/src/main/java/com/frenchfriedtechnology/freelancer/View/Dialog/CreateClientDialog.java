@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -205,7 +206,8 @@ public class CreateClientDialog extends DialogFragment {
 
         builder.setView(fl);
         AlertDialog dialog = builder.create();
-
+        dialog.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         // FIXME: 17/08/16 not really working correctly
 //        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 //            @Override
